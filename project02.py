@@ -4,9 +4,13 @@ Date:           4/22/2024
 Assignment:     Project 2
 Course:         CPSC1050
 
+Link: 
+
 Project Description: This project outlines a game similar to fortnite, where the user choosing landing spots, items to pick up and use in a inventory, as well as maintaining health/survive.
 
 """
+
+# This class handles the health of the user
 class Health:
     def __init__(self):
         self.health = 100
@@ -40,30 +44,33 @@ class Room:
         self.description = description
         self.exits = exits
 
-#This is a function that returns the room name
+#This is a function that returns the location name
     def get_name(self):
         return self.name
 
-#This is the function that returns the description of the room
+#This is the function that returns the description of the location
     def get_description(self):
         return self.description
 
-#Function where you can get the exits of the current room
+#Function where you can get the locations of the current location
     def get_exits(self):
         return self.exits
-#Function of a list of the exits with a new line in between
+#Function of a list of the locations with a new line in between
     def list_exits(self):
         return '\n'.join(self.exits)
-#This is the actual string printed whenever a room is entered
+#This is the actual string printed whenever location is entered
     def __str__(self):
-        return f"{self.name}: {self.description}\n\nLocations:\n{self.list_exits()}"
+        return f"{self.name}: {self.description}\n\n"
+    
+    def location_opt(self):
+        return f'Locations:\n{self.list_exits()}'
 
 class AdventureMap:
     #Initialize the map
     def __init__(self):
         self.map = {}
     
-    #Funciton where rooms can be added to the map
+    #Funciton where locations can be added to the map
     def add_place(self, room):
         self.map[room.name.lower()] = room
     #Function where if they choose an exit it will go to the exit if not an exception error occurs
@@ -92,13 +99,6 @@ class Inventory:
         else:
             return False
 
-
-    #def use_item(self,item):
-    #    if item in self.items:
-    #        self.items.remove(item)
-    #        return True
-    #    else:
-    #        return False
         
 
 
@@ -107,7 +107,7 @@ def main():
     adventure_map = AdventureMap()
     inventory = Inventory()
     health = Health()
-    #All rooms are being added
+    #All locations are being added
     adventure_map.add_place(Room("Tilted Towers", "A city composed of several large skyscrapers with cramped interiors, each consisting of several stories, the tallest of which was a large clock tower", ['Greasy Grove']))
     adventure_map.add_place(Room("Pleasant Park", "The longest standing named location in Fortnite history, this place is a nice suburb town with plenty of houses and a soccer pitch.", ["Retail Row", "Wailing Woods", "Salty Springs"]))
     adventure_map.add_place(Room("Greasy Grove", "Notably known for the elegant Durrr Burger restaurant, there is also an outdoor equipment store and a gas station equipped with fantasic loot!", ["Salty Springs", "Tilted Towers"]))
@@ -116,7 +116,7 @@ def main():
     #adventure_map.add_room(Room("Loot Lake", "An island house surrounded by shallow lake water, there are various hidden secreted found here.", ["Wailing Woods", "Pleasant Park"]))
     adventure_map.add_place(Room("Wailing Woods", "You've came to the perfect spot to collect materials. The biggest forested area on the map, these thick rooted woods provide great shelter but not much desired loot.", ["Salty Springs", "Retail Row"]))
 
-    #Starting statement and starting the game in the study room
+    #Starting statement/Game Title ("Fortnite")
     print("\nWelcome to Fortnite!")
     print('Aviod running out of health, and reach a health of 160 to obtain full potential/win!  ')
     print()
@@ -125,16 +125,16 @@ def main():
         print('Before playing, enter a username (cannot be all digits): ',end='')
         name = input().strip()
 
+    # Starting spot is salty springs, and user is asked a question
     print('\nThe Bus has dropped you off at a hot spot, named Salty Springs! To finish looting/traveling to locations, please type exit to hop back on the battle bus.\n')
-    
-    print('This highly populated small residental area has above average loot, but make sure to check the attics!')
-    #the_room = adventure_map.get_place("Salty Springs")
-    #print(the_room)
+    the_room = adventure_map.get_place("Salty Springs")
+    print(the_room)
     print('\nWhat item would you like to pickup? Rift To Go, Grenade, Grappler: ',end='')
     action_ = input().lower().strip()
     action = action_.title()
     the_item = inventory.get_item(action)
 
+    # how health is effected by choice
     if the_item:
         print('\nYou have already used this item. You have failed to pay attention!\n')
         print('Lose 10 health')
@@ -164,27 +164,16 @@ def main():
     currentHealth = health.get()
     print('Health:',currentHealth)
 
-    print('\n\nLocations:')
-    print('Greasy Grove')
-    print('Pleasant Park')
-    print('Wailing Woods')
     
-
-
-
-
-
-
-
-
+    # While loop executes until user decides to exit (or wins/losses)
     choice = 'play'
     while choice != 'exit':
         try:
             print()
-            #Asks for an exit and takes in an input 
-            print("Please choose a location: ",end='')
+            #Asks for a location and takes in an input
+            print(the_room.location_opt())
+            print("\nPlease choose a location: ",end='')
             exit_choice = input().title().strip()
-            the_room = adventure_map.get_place(exit_choice)
             
             #Checks to see if user wants to end the game, if so it breaks out of the game loop
             if exit_choice.lower() == 'exit':
@@ -193,16 +182,17 @@ def main():
                 print("The battle bus has passed by to pick you up early. Come back to Fortnite's Battle Royale Island again when your up for the challenge!")
                 break
 
+            # if location choice in location options, if-statement executes
             if exit_choice in the_room.get_exits():
                 
-                #the_room = adventure_map.get_place(exit_choice)
+                the_room = adventure_map.get_place(exit_choice)
                 print()
                 print(the_room)
-                #print('Locations:\n')
-                #options = 
+                print()
 
                 # TILTED TOWERS 
                 if exit_choice == 'Tilted Towers':
+                    # User chooses item to pick up, statement is displayed and health is changed accordingly
                     print('What item would you like to pickup? Freeze Trap, Berries, Pistol: ',end='')
                     action_ = input().lower().strip()
                     action = action_.title()
@@ -380,7 +370,7 @@ def main():
 
                 # WAILING WOODS     
                 if exit_choice == 'Wailing Woods':
-                    print('What item would you like to pickup? Scoped AR, Fishing Rod, Shopping Cart: ',end='')
+                    print('What item would you like to pickup? Scoped Rifle, Fishing Rod, Shopping Cart: ',end='')
                     action_ = input().lower().strip()
                     action = action_.title()
                     the_item = inventory.get_item(action)  
@@ -390,7 +380,7 @@ def main():
                         print('Lose 10 health')
                         health.lose(10)
                     
-                    elif action == 'Scoped AR':
+                    elif action == 'Scoped Rifle':
                         inventory.obtain('Scoped AR')
                         print('\nYou may have been hesitant to pick this up, but you lucked out. This is a mythic Scoped AR!')
                         print('Gain 45 health')
@@ -414,10 +404,12 @@ def main():
                         health.lose(25)
                     
                 currentHealth = health.get()
+                # if a health below 0, game ends (user loses)
                 if currentHealth <= 0:
                     print('Health: 0')
                     print('You have died! Better luck next time.')
                     break
+                # if a health above 150, game ends (user wins)
                 elif currentHealth >= 150:
                     print('Health:',currentHealth)
                     print('You reached a health above 150, reaching your full potential!')
@@ -426,7 +418,6 @@ def main():
                     break
                 else:
                     print('Health:',currentHealth)
-    
                 
             #If not a valid exit an error is raised so our exception class can be called
             else:
@@ -436,16 +427,17 @@ def main():
         except ExitNotFoundError as e:
             print(e)
 
-    #print(f'\n{name},Did you have fun playing the game? (Y/N): ',end='')    
-    #final_feel = input().upper()
-    #while final_feel != 'Y' or final_feeel != 'N':
-    #    print(f'{name}, Please input a valid response (Y/N): ',end='')
-    #    final_feel = input().upper()
+    # Obtaining final thoughts from the user
+    print(f'\n{name}, did you have fun playing the game? (Y/N): ',end='')    
+    final_feel = input().upper()
+    while final_feel != 'Y' and final_feel != 'N':
+        print(f'{name}, Please input a valid response (Y/N): ',end='')
+        final_feel = input().upper()
     
-    #if final_feel == 'Y':
-    #    print('\nI am gald you enjoyed the game!!!')
-    #elif final_feel == 'N':
-    #    print('\nI hope you have a better time next time around.')
+    if final_feel == 'Y':
+        print('\nI am gald you enjoyed the game!!!')
+    elif final_feel == 'N':
+        print('\nI hope you have a better time next time around.')
 
 if __name__ == "__main__":
     main()
