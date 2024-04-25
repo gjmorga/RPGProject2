@@ -4,7 +4,7 @@ Date:           4/22/2024
 Assignment:     Project 2
 Course:         CPSC1050
 
-Link: 
+Link: https://github.com/gjmorga/RPGProject2
 
 Project Description: This project outlines a game similar to fortnite, where the user choosing landing spots, items to pick up and use in a inventory, as well as maintaining health/survive.
 
